@@ -95,7 +95,7 @@ public class Tracker extends JFrame
 		//-------------------- "REMOVE ASSIGNMENT" PANEL --------------------//
 		//TODO: PRINT ASSIGNMENT NAMES
 		JLabel removeName = new JLabel("Enter assignment name to remove: ");
-		//JLabel assignmentNames = new JLabel("()"); //PUT NAMES IN BETWEEN
+		//TODO JLabel assignmentNames = new JLabel("()"); //PUT NAMES IN BETWEEN
 		JTextField fieldRemove = new JTextField(30);
 		
 		//"Back" button

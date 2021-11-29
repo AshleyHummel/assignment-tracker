@@ -15,7 +15,9 @@ Create and remove assignments, then view them in upcoming order! Get information
 
 
 ## Screenshots
-<img src="blank.png" width="800">
+<img src="tracker_gif.gif" width="600">
+Project Storyboard
+<img src="tracker_storyboard.png" width="500">
 
 ## License
 This project is open source and available under the MIT License.

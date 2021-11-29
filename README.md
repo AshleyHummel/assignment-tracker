@@ -14,7 +14,7 @@ Create and remove assignments, then view them in upcoming order! Get information
 - View upcoming assignments sorted by date as well as the days until due (according to the current date)
 
 
-## Screenshots
+## Content
 <img src="tracker_gif.gif" width="600">
 Project Storyboard
 <img src="tracker_storyboard.png" width="500">

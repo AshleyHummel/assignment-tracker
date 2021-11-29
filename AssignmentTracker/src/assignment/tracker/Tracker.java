@@ -10,7 +10,10 @@ package assignment.tracker;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
+
 import javax.swing.*;
 
 public class Tracker extends JFrame
@@ -27,15 +30,10 @@ public class Tracker extends JFrame
 	JButton bCreate, bRemove, bUpcoming, bBack1, bDone1, bBack2, bDone2, bBack3;
 	String assignmentNames = ""; //used to display names of current assignments
 	
-	//used to sort assignments
-	String month1;
-	String day1;
-	String year1;
-	String month2;
-	String day2;
-	String year2;
-	String[] parts1;
-	String[] parts2;
+	String[] parts;
+	int month;
+	int day;
+	int year;
 	
 	public Tracker() 
 	{
@@ -57,11 +55,13 @@ public class Tracker extends JFrame
 		pUpcoming = new JPanel();
 		boxLayout = new BoxLayout(pUpcoming, BoxLayout.PAGE_AXIS);
 		pUpcoming.setLayout(boxLayout);
+		pUpcoming.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
 		displayAssignments = new JPanel();
 		boxLayout2 = new BoxLayout(displayAssignments, BoxLayout.PAGE_AXIS);
 		displayAssignments.setLayout(boxLayout2);
 		displayAssignments.setAlignmentX(Component.CENTER_ALIGNMENT);
+		displayAssignments.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); 
 		
 		cardLayout = new CardLayout();
 		panel.setLayout(cardLayout);
@@ -95,7 +95,7 @@ public class Tracker extends JFrame
 		JTextField fieldName = new JTextField(20);
 		JLabel description = new JLabel("Enter short description: ");
 		JTextField fieldDescription = new JTextField(30);
-		JLabel dueDate = new JLabel("Enter due date (EX: 01/16/2021): ");
+		JLabel dueDate = new JLabel("Enter due date (EX: 01-16-2021): ");
 		JTextField fieldDate = new JTextField(20);
 		
 		//"Back" button
@@ -109,7 +109,11 @@ public class Tracker extends JFrame
 		bDone1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//add assignment to ArrayList
-				assignments.add(new Assignment(fieldName.getText(), fieldDescription.getText(), fieldDate.getText()));
+				parts = fieldDate.getText().split("-"); //split next index's date
+				month = Integer.parseInt(parts[0]);
+				day = Integer.parseInt(parts[1]);
+				year = Integer.parseInt(parts[2]);
+				assignments.add(new Assignment(fieldName.getText(), fieldDescription.getText(), LocalDate.of(year,month,day)));
 				fieldName.setText("");
 				fieldDescription.setText("");
 				fieldDate.setText("");
@@ -117,51 +121,22 @@ public class Tracker extends JFrame
 				//update assignments ArrayList
 				assignmentNames = ""; //reset String
 				for(int i = 0; i < assignments.size(); i++) {
-					assignmentNames += assignments.get(i).getName() + ", ";
+					assignmentNames += assignments.get(i).getName();
+					if(i != assignments.size() - 1) assignmentNames += ", ";
 				}
 				displayNames.setText(assignmentNames);
 				
 				//FOR "UPCOMING ASSIGNMENTS" PANEL
-				//go through assignments ArrayList and sort by date
-				/*
-				for(int i = 0; i < assignments.size() - 1; i++) {
-					parts1 = assignments.get(i).getDate().split("/"); //split current index's date
-					month1 = parts1[0];
-					day1 = parts1[1];
-					year1 = parts1[2];
-					
-					parts2 = assignments.get(i + 1).getDate().split("/"); //split next index's date
-					month2 = parts2[0];
-					day2 = parts2[1];
-					year2 = parts2[2];
-					
-					//sort by year
-					if(Integer.parseInt(year1) > Integer.parseInt(year2)) {
-						Assignment temp = assignments.get(i);
-						assignments.set(i, assignments.get(i + 1));
-						assignments.set(i + 1, temp);
-					}
-					//sort by month
-					else if(Integer.parseInt(month1) > Integer.parseInt(month2) && Integer.parseInt(year1) > Integer.parseInt(year2)) {
-						Assignment temp = assignments.get(i);
-						assignments.set(i, assignments.get(i + 1));
-						assignments.set(i + 1, temp);
-					}
-					//sort by day
-					else if(Integer.parseInt(day1) > Integer.parseInt(day2) && Integer.parseInt(month1) > Integer.parseInt(month2) && Integer.parseInt(year1) > Integer.parseInt(year2)) {
-						Assignment temp = assignments.get(i);
-						assignments.set(i, assignments.get(i + 1));
-						assignments.set(i + 1, temp);
-					}
-				}
-				*/
+				//go through assignments ArrayList and sort by date (using comparator method in Assignment.java)
+				Collections.sort(assignments, Assignment.dateComparator);
 				
 				//update assignments ArrayList
 				displayAssignments.removeAll(); //clear displayAssignments JPanel before adding all assignments
 				for(int i = 0; i < assignments.size(); i++) {
-					displayAssignments.add(new JLabel(assignments.get(i).getName() + " - due " + assignments.get(i).getDate()));
+					displayAssignments.add(new JLabel(assignments.get(i).getName() + " - due " + assignments.get(i).getDate() 
+							+ " ... " + assignments.get(i).daysLeft() + " DAYS UNTIL DUE"));
 				}
-				
+
 				cardLayout.show(panel, "linkMenu");
 			}
 		});
@@ -178,9 +153,10 @@ public class Tracker extends JFrame
 		
 		//-------------------- "REMOVE ASSIGNMENT" PANEL --------------------//
 		JLabel assignmentsText = new JLabel("Assignments: ");
+		assignmentsText.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
 		JLabel removeName = new JLabel("Enter assignment name to remove: ");
-		//JLabel assignmentNames = new JLabel("()"); //PUT NAMES IN BETWEEN
+		removeName.setAlignmentX(Component.CENTER_ALIGNMENT);
 		JTextField fieldRemove = new JTextField(30);
 		
 		//"Back" button
@@ -198,12 +174,25 @@ public class Tracker extends JFrame
 						assignments.remove(i);
 					}
 				}
+				
 				//update assignments ArrayList
 				assignmentNames = ""; //reset String
 				for(int i = 0; i < assignments.size(); i++) {
-					assignmentNames += assignments.get(i).getName() + ", ";
+					assignmentNames += assignments.get(i).getName();
+					if(i != assignments.size() - 1) assignmentNames += ", ";
 				}
 				displayNames.setText(assignmentNames);
+				
+				//FOR "UPCOMING ASSIGNMENTS" PANEL
+				//go through assignments ArrayList and sort by date (using comparator method in Assignment.java)
+				Collections.sort(assignments, Assignment.dateComparator);
+				
+				//update assignments ArrayList
+				displayAssignments.removeAll(); //clear displayAssignments JPanel before adding all assignments
+				for(int i = 0; i < assignments.size(); i++) {
+					displayAssignments.add(new JLabel(assignments.get(i).getName() + " - due " + assignments.get(i).getDate() 
+							+ " ... " + assignments.get(i).daysLeft() + " DAYS UNTIL DUE"));
+				}
 				
 				cardLayout.show(panel, "linkMenu");
 				fieldRemove.setText("");
@@ -219,11 +208,13 @@ public class Tracker extends JFrame
 		pRemove.add(bDone2);
 		
 		//-------------------- "UPCOMING ASSIGNMENTS" PANEL --------------------//
-		JLabel assignmentsText2 = new JLabel("Upcoming Assignments: ");
+		JLabel assignmentsText2 = new JLabel("Upcoming Assignments:");
+		assignmentsText2.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
 		//"Back" button
 		bBack3 = new JButton("Back");
 		bBack3.setPreferredSize(new Dimension(120,35));
+		bBack3.setAlignmentX(Component.CENTER_ALIGNMENT);
 		bBack3.addActionListener(e -> cardLayout.show(panel, "linkMenu"));
 		
 		pUpcoming.add(assignmentsText2);

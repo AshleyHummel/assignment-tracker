@@ -33,13 +33,12 @@ public class Assignment
 	}
 	
 	//return how many days are left until assignment is due
-	public int daysLeft() {
+	public long daysLeft() {
 		LocalDate now = LocalDate.now();
 		
-		Period period = Period.between(date, now);
-		int diff = Math.abs(period.getDays());
+		long daysBetween = java.time.temporal.ChronoUnit.DAYS.between(now, date); 
 		
-		return diff;
+		return daysBetween;
 	}
 	
 	// Comparator for sorting the list by date

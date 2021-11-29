@@ -1,5 +1,7 @@
 /*
  * Assignment.java class used in Tracker.java
+ * 
+ * Controls assignment objects and can sort them by date.
 */
 
 package assignment.tracker;

@@ -1,9 +1,11 @@
 /*
  * Name: Ashley Hummel
  * CSE 110 Honors Contract - Fall 2021
- * Description:
+ * Description: Java Swing GUI allowing user to create and remove assignments contained a name, description, and due date.
+ * 				Upcoming assignments can then be viewed in sorted order by date along with the days until due according to
+ * 					the current date.
  * 
- * Classes Used:
+ * Classes Used: Assignment.java
  */
 
 package assignment.tracker;
@@ -70,17 +72,17 @@ public class Tracker extends JFrame
 		lWelcome = new JLabel("\nWelcome to Assignment Tracker!\n");
 		
 		//"Create assignment" button
-		bCreate = new JButton("Create new assignment");
+		bCreate = new JButton("Create New Assignment");
 		bCreate.setPreferredSize(new Dimension(200,50));
 		bCreate.addActionListener(e -> cardLayout.show(panel, "linkCreate"));
 		
 		//"Remove assignment" button
-		bRemove = new JButton("Remove assignment");
+		bRemove = new JButton("Remove Assignment");
 		bRemove.setPreferredSize(new Dimension(200,50));
 		bRemove.addActionListener(e -> cardLayout.show(panel, "linkRemove"));
 		
 		//"Upcoming assignments" button
-		bUpcoming = new JButton("Upcoming assignments");
+		bUpcoming = new JButton("Upcoming Assignments");
 		bUpcoming.setPreferredSize(new Dimension(200,50));
 		bUpcoming.addActionListener(e -> cardLayout.show(panel, "linkUpcoming"));
 		
